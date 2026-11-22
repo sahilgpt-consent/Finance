@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sahil Finance (Demo) - Loans and Savings</title>
+  <meta name="description" content="Demo website used to test Consentera cookie consent. Not a real financial service.">
+
+  <!-- 1) Cookie helpers + consent shim. Must load first. -->
+  <script src="js/consent-shim.js"></script>
+
+  <!-- 2) CONSENTERA BANNER: paste the snippet from Consentera > Consent Collection > Cookie Consent here,
+          ABOVE every other script. Then set SF_SIMULATOR = false below so the test panel stops granting consent.
+       Example (placeholder only):
+       <script src="https://YOUR-CONSENTERA-CDN/banner.js" data-site-id="YOUR_SITE_ID"></script>
+  -->
+  <script>window.SF_SIMULATOR = true;</script>
+
+  <!-- 3) Consentera ownership verification meta tag goes here if Consentera asks for one -->
+
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/app.js" defer></script>
+</head>
+<body>
+  <div class="demo-strip">Demo website for testing cookie consent. Not a real financial service.</div>
+
+  <header class="nav">
+    <a class="brand" href="index.html"><span class="logo">SF</span> Sahil Finance</a>
+    <nav>
+      <a href="#products">Products</a>
+      <a href="#emi">EMI calculator</a>
+      <a href="#contact">Contact</a>
+      <a href="privacy.html">Privacy and cookies</a>
+    </nav>
+    <label class="lang">
+      <span class="sr">Language</span>
+      <select id="langSelect">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </label>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1 id="heroTitle">Smart loans and savings, made simple</h1>
+      <p id="heroSub">Personal loans, fixed deposits and credit tools for everyday India.</p>
+      <a class="btn" href="#emi">Calculate your EMI</a>
+    </section>
+
+    <section id="products" class="cards">
+      <article class="card"><h3>Personal Loan</h3><p>From 10.5% p.a., up to Rs 10 lakh, instant approval.</p></article>
+      <article class="card"><h3>Fixed Deposit</h3><p>Up to 7.75% p.a. with flexible tenures.</p></article>
+      <article class="card"><h3>Credit Score Check</h3><p>Free monthly credit report with tips to improve.</p></article>
+    </section>
+
+    <section id="emi" class="panel">
+      <h2>EMI calculator</h2>
+      <div class="emi-grid">
+        <label>Loan amount (Rs)<input id="amt" type="number" value="500000" min="10000" step="10000"></label>
+        <label>Interest rate (% p.a.)<input id="rate" type="number" value="10.5" min="1" step="0.1"></label>
+        <label>Tenure (months)<input id="months" type="number" value="36" min="3" step="1"></label>
+      </div>
+      <p class="emi-out">Monthly EMI: <strong id="emiOut">-</strong></p>
+    </section>
+
+    <section id="contact" class="panel">
+      <h2>Talk to us</h2>
+      <p>This form is for display only and sends nothing.</p>
+      <form id="contactForm">
+        <input type="hidden" name="csrf" id="csrfField">
+        <label>Name<input type="text" placeholder="Your name"></label>
+        <label>Phone<input type="tel" placeholder="+91"></label>
+        <button class="btn" type="submit">Request a call back</button>
+      </form>
+      <p id="formMsg" class="muted"></p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Sahil Finance (Demo)</span>
+    <a href="privacy.html">Privacy and cookie policy</a>
+    <a href="#" id="cookieSettingsLink">Cookie settings</a>
+    <span>Grievances: grievance@example.com</span>
+  </footer>
+
+  <!-- Test panel: shows live cookies and simulates consent until Consentera is installed -->
+  <div id="inspector" class="inspector collapsed" aria-live="polite"></div>
+
+  <!-- Non-essential trackers. type="text/plain" means the browser will NOT run them until consent is given.
+       Change data-consent-category to whatever attribute Consentera's blocking expects. -->
+  <script type="text/plain" data-consent-category="analytics" src="js/analytics-demo.js"></script>
+  <script type="text/plain" data-consent-category="marketing" src="js/marketing-demo.js"></script>
+</body>
+</html>
