@@ -1,1 +1,0 @@
-printf '%s' "e786855f8589b9154d53435b06668a5b" > .well-known/consentera-site-verification.txt
