@@ -45,7 +45,7 @@
     var blocked = document.querySelectorAll('script[type="text/plain"][data-consent-category="' + category + '"]');
     Array.prototype.forEach.call(blocked, function (old) {
       var s = document.createElement('script');
-      var src = old.getAttribute('src');
+      var src = old.getAttribute('data-consentera-src') || old.getAttribute('src');
       if (src) s.src = src; else s.textContent = old.textContent;
       s.setAttribute('data-consent-activated', category);
       old.parentNode.replaceChild(s, old);
@@ -73,6 +73,39 @@
       document.dispatchEvent(new CustomEvent('sf:consent', { detail: SFConsent.list() }));
     }
   };
+
+  // Cookies the Consentera widget itself may set (its own consent record) count as necessary.
+  SFConsent.lookup = function (name) {
+    if (REGISTER[name]) return REGISTER[name];
+    if (/^(ce_|consentera)/i.test(name)) return { category: 'necessary', purpose: 'Consentera consent record', duration: '-', party: 'First' };
+    return null;
+  };
+
+  // ---- Bridge: follow the Consentera banner's decisions ----
+  // The widget fires "consentera:decision" with detail { granted: [...category keys], mustAsk: bool }.
+  // Category keys come from your Consentera setup, so map common names onto this site's four categories.
+  function normalise(key) {
+    var k = String(key).toLowerCase();
+    if (/necess|essential|strict|required/.test(k)) return 'necessary';
+    if (/analytic|statist|perform|measure/.test(k)) return 'analytics';
+    if (/market|advert|target|\bads?\b/.test(k)) return 'marketing';
+    if (/function|prefer/.test(k)) return 'functional';
+    return k;
+  }
+  document.addEventListener('consentera:decision', function (ev) {
+    var d = ev.detail || {};
+    var now = {};
+    (d.granted || []).forEach(function (k) { now[normalise(k)] = true; });
+    window.SFLastDecision = { raw: d.granted || [], mustAsk: !!d.mustAsk, mapped: Object.keys(now) };
+    var withdrew = false;
+    CATEGORIES.forEach(function (c) {
+      if (c === 'necessary') return;
+      if (now[c]) SFConsent.grant(c);
+      else if (granted[c]) { SFConsent.revoke(c); withdrew = true; }
+    });
+    // A tracker that already ran keeps running until the page reloads, so reload after a withdrawal.
+    if (withdrew) setTimeout(function () { location.reload(); }, 300);
+  });
 
   window.SFCookies = SFCookies;
   window.SFConsent = SFConsent;
