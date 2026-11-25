@@ -6,17 +6,16 @@
   <title>Sahil Finance (Demo) - Loans and Savings</title>
   <meta name="description" content="Demo website used to test Consentera cookie consent. Not a real financial service.">
 
-  <!-- 1) Cookie helpers + consent shim. Must load first. -->
+  <!-- 1) CONSENTERA BANNER - pasted exactly as given by Consentera. Keep it first and keep the order. -->
+  <link rel="preconnect" href="https://uat.consentera.in" crossorigin>
+  <script>window.consentera=window.consentera||function(){(window.consentera.q=window.consentera.q||[]).push(arguments)};window.consentera.t="583ed211-92da-4c6e-a1cd-e92c8d0358ca";window.consentera.s="e9197fef-3d3b-4403-bec5-8700f2ee6f66";</script>
+  <script async src="https://uat.consentera.in/sdk/consentera-widget.js?v=0fde5561b201c7fb3e10933b6372b42c58de98f9f48a879479f0481cdafa7065" integrity="sha256-D95VYbIBx/s+EJM7Y3K0LFjemPn0ioeUefBIHNr6cGU=" crossorigin="anonymous"></script>
+
+  <!-- 2) Simulator off: consent now comes from the Consentera banner -->
+  <script>window.SF_SIMULATOR = false;</script>
+
+  <!-- 3) Cookie helpers + bridge that listens to Consentera's decisions -->
   <script src="js/consent-shim.js"></script>
-
-  <!-- 2) CONSENTERA BANNER: paste the snippet from Consentera > Consent Collection > Cookie Consent here,
-          ABOVE every other script. Then set SF_SIMULATOR = false below so the test panel stops granting consent.
-       Example (placeholder only):
-       <script src="https://YOUR-CONSENTERA-CDN/banner.js" data-site-id="YOUR_SITE_ID"></script>
-  -->
-  <script>window.SF_SIMULATOR = true;</script>
-
-  <!-- 3) Consentera ownership verification meta tag goes here if Consentera asks for one -->
 
   <link rel="stylesheet" href="css/style.css">
   <script src="js/app.js" defer></script>
@@ -88,8 +87,8 @@
   <div id="inspector" class="inspector collapsed" aria-live="polite"></div>
 
   <!-- Non-essential trackers. type="text/plain" means the browser will NOT run them until consent is given.
-       Change data-consent-category to whatever attribute Consentera's blocking expects. -->
-  <script type="text/plain" data-consent-category="analytics" src="js/analytics-demo.js"></script>
-  <script type="text/plain" data-consent-category="marketing" src="js/marketing-demo.js"></script>
+       Consentera releases them by data-consentera-category; data-consent-category is our fallback bridge. -->
+  <script type="text/plain" data-consentera-category="analytics" data-consentera-src="js/analytics-demo.js" data-consent-category="analytics" src="js/analytics-demo.js"></script>
+  <script type="text/plain" data-consentera-category="marketing" data-consentera-src="js/marketing-demo.js" data-consent-category="marketing" src="js/marketing-demo.js"></script>
 </body>
 </html>
